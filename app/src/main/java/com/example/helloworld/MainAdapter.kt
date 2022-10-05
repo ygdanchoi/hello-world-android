@@ -6,15 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MainAdapter(private val names: List<String>) :
-    RecyclerView.Adapter<MainAdapter.ViewHolder>() {
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nameView: TextView = itemView.findViewById(R.id.name)
-
-        fun bind(name: String) {
-            nameView.text = name
-        }
-    }
+class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+    private var names = listOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.main_item, parent, false)
@@ -27,5 +20,18 @@ class MainAdapter(private val names: List<String>) :
 
     override fun getItemCount(): Int {
         return names.size
+    }
+
+    fun updateNames(names: List<String>) {
+        this.names = names
+        notifyDataSetChanged()
+    }
+
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val nameView: TextView = itemView.findViewById(R.id.name)
+
+        fun bind(name: String) {
+            nameView.text = name
+        }
     }
 }
