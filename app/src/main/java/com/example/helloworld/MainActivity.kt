@@ -5,15 +5,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.json.JSONArray
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val gsonConverterFactory = GsonConverterFactory.create()
+        val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:3000")
+            .addConverterFactory(gsonConverterFactory).build()
+        val mainService = retrofit.create(MainService::class.java)
 
         val mainAdapter = MainAdapter().apply { updateNames(listOf("loading...")) }
 
@@ -24,18 +27,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         Thread {
-            val url = URL("http://10.0.2.2:3000/people")
-            val connection = url.openConnection() as HttpURLConnection
-            val jsonResponse = connection.inputStream.bufferedReader().readLine()
-            val jsonArray = JSONArray(jsonResponse)
-
-            val names = mutableListOf<String>()
-            for (i in 0 until jsonArray.length()) {
-                val person = jsonArray[i] as JSONObject
-                names.add(person.getString("name"))
+            mainService.getPeople().execute().body()?.map { it.name }?.let {
+                runOnUiThread { mainAdapter.updateNames(it) }
             }
-
-            runOnUiThread { mainAdapter.updateNames(names) }
         }.start()
     }
 }
