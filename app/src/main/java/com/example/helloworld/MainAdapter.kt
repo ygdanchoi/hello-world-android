@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
-    private var names = listOf<String>()
+    private var people = listOf<Person>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.main_item, parent, false)
@@ -15,23 +15,23 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(names[position])
+        holder.bind(people[position])
     }
 
     override fun getItemCount(): Int {
-        return names.size
+        return people.size
     }
 
-    fun updateNames(names: List<String>) {
-        this.names = names
+    fun updateNames(people: List<Person>) {
+        this.people = people
         notifyDataSetChanged()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nameView: TextView = itemView.findViewById(R.id.name)
 
-        fun bind(name: String) {
-            nameView.text = name
+        fun bind(person: Person) {
+            nameView.text = person.name
         }
     }
 }

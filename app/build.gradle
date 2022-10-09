@@ -57,4 +57,6 @@ dependencies {
 
     // coroutine lifecycle scopes
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
+
+    implementation "io.insert-koin:koin-android:3.2.2"
 }
