@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +23,10 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = mainAdapter
+        }
+
+        findViewById<FloatingActionButton>(R.id.fab).apply {
+            setOnClickListener { viewModel.fetchPeople() }
         }
 
         lifecycleScope.launchWhenStarted {
