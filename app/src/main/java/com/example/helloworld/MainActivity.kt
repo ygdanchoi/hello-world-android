@@ -13,23 +13,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val gsonConverterFactory = GsonConverterFactory.create()
-        val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:3000")
-            .addConverterFactory(gsonConverterFactory).build()
-        val mainService = retrofit.create(MainService::class.java)
-
-        val mainAdapter = MainAdapter().apply { updateNames(listOf("loading...")) }
+        val mainAdapter = MainAdapter().apply { updateNames(listOf("Loading...")) }
 
         findViewById<RecyclerView>(R.id.recycler_view).apply {
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             adapter = mainAdapter
         }
-
-        Thread {
-            mainService.getPeople().execute().body()?.map { it.name }?.let {
-                runOnUiThread { mainAdapter.updateNames(it) }
-            }
-        }.start()
     }
 }
