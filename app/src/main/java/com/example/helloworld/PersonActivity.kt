@@ -1,29 +1,40 @@
 package com.example.helloworld
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class PersonActivity : AppCompatActivity() {
 
-    lateinit var nameTextView: TextView
-    lateinit var ageTextView: TextView
-    lateinit var weightTextView: TextView
-
-    lateinit var person: Person
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_person)
+        viewPager = findViewById(R.id.view_pager)
+        tabLayout = findViewById(R.id.tab_layout)
 
-        nameTextView = findViewById(R.id.textview_name)
-        ageTextView = findViewById(R.id.textview_age)
-        weightTextView = findViewById(R.id.textview_weight)
+        val person = intent.getParcelableExtra<Person>(EXTRA_PERSON)!!
 
-        person = intent.getParcelableExtra(EXTRA_PERSON)!!
-        nameTextView.text = person.name
-        ageTextView.text = "${person.age} years old"
-        weightTextView.text = "${person.weight} lbs"
+        viewPager.adapter = object : FragmentStateAdapter(supportFragmentManager, lifecycle) {
+            override fun getItemCount(): Int = 2
+
+            override fun createFragment(position: Int): Fragment {
+                return when (position) {
+                    0 -> PersonOverviewFragment.newInstance(person)
+                    else -> PersonDetailsFragment.newInstance(person)
+                }
+            }
+        }
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = "OBJECT ${(position + 1)}"
+        }.attach()
     }
 
     companion object {
