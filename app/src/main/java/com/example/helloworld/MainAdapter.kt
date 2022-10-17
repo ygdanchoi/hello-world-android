@@ -1,5 +1,6 @@
 package com.example.helloworld
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,13 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
         fun bind(person: Person) {
             nameView.text = person.name
+
+            itemView.setOnClickListener {
+                val intent = Intent(it.context, PersonActivity::class.java).apply {
+                    putExtra(PersonActivity.EXTRA_PERSON, person)
+                }
+                it.context.startActivity(intent)
+            }
         }
     }
 }

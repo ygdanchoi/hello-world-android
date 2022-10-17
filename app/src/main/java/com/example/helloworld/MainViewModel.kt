@@ -17,7 +17,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     }
 
     fun fetchPeople() {
-        _people.value = listOf(Person(name = "Loading..."))
+        _people.value = listOf(Person(name = "Loading...", age = -1, weight = -1))
         viewModelScope.launch {
             _people.value = repository.getPeople()
         }

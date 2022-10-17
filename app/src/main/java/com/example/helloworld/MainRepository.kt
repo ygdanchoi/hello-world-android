@@ -11,6 +11,6 @@ class MainRepository(private val apiService: MainService) {
     }
 
     companion object {
-        val ERROR = listOf(Person(name = "Error fetching people."))
+        val ERROR = listOf(Person(name = "Error fetching people.", age = -1, weight = -1))
     }
 }
